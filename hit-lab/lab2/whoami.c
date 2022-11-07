@@ -1,12 +1,14 @@
-# define __LIBRARY__
-# include <unistd.h>
+#include <errno.h>
+#define __LIBRARY__
+#include <unistd.h>
+#include <stdio.h>
 
 _syscall2(int, whoami,char*,name,unsigned int,size);
 
-int main() {
+int main()
+{
 	char s[30];
-	int rlen = 0;
-	rlen = whoami(s,30);//这里调用了_syscall2写的whoami函数
+	whoami(s,30);
 	printf("%s\n",s);
-	return rlen;
+	return 0;
 }
