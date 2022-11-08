@@ -2,8 +2,6 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/times.h>
-#include <sys/wait.h>
-#include <sys/types.h>
 
 #define HZ	100
 
@@ -11,43 +9,6 @@ void cpuio_bound(int last, int cpu_time, int io_time);
 
 int main(int argc, char * argv[])
 {
-	pid_t father,son1,son2,son3,tmp1,tmp2,tmp3;
-	tmp1=fork();
-	if(tmp1==0)			/* son1 */
-	{
-		son1=getpid();
-		printf("The son1's pid:%d\n",son1);
-		printf("I am son1\n");
-		cpuio_bound(10, 3, 2);
-		printf("Son1 is finished\n");
-	}
-	else if(tmp1>0)
-	{
-		son1=tmp1;
-		tmp2=fork();
-		if(tmp2==0)		/* son2 */
-		{
-			son2=getpid();
-			printf("The son2's pid:%d\n",son2);
-			printf("I am son2\n");
-			cpuio_bound(5, 1, 2);
-			printf("Son2 is finished\n");
-		}
-		else if(tmp2>0)		/* father */
-		{
-			son2=tmp2;
-			father=getpid();
-			printf("The father get son1's pid:%d\n",tmp1);
-			printf("The father get son2's pid:%d\n",tmp2);
-			wait((int *)NULL);
-			wait((int *)NULL);
-			printf("Now is the father's pid:%d\n",father);
-		}
-		else
-			printf("Creat son2 failed\n");
-	}
-	else
-		printf("Creat son1 failed\n");
 	return 0;
 }
 
@@ -94,3 +55,4 @@ void cpuio_bound(int last, int cpu_time, int io_time)
 		last -= sleep_time;
 	}
 }
+
